@@ -2,7 +2,7 @@ package fifo
 
 import (
 	"container/list"
-	"goCache"
+	"goCache/cache"
 	"goCache/common"
 )
 
@@ -24,7 +24,7 @@ func (f *fifo) Set(key string, value interface{}) {
 		f.ll.MoveToBack(e)
 		en := e.Value.(*common.Entry)
 		// 去除旧的 usedBytes，添加新的
-		f.usedBytes = f.usedBytes - goCache.CalcLen(en.Value) + goCache.CalcLen(value)
+		f.usedBytes = f.usedBytes - cache.CalcLen(en.Value) + cache.CalcLen(value)
 		en.Value = value
 		return
 	}
@@ -75,7 +75,7 @@ func (f *fifo) removeElement(e *list.Element) {
 	}
 }
 
-func New(maxBytes int, onEvicted func(key string, value interface{})) goCache.Cache {
+func New(maxBytes int, onEvicted func(key string, value interface{})) cache.Cache {
 	return &fifo{
 		maxBytes:  maxBytes,
 		onEvicted: onEvicted,

@@ -2,7 +2,7 @@ package lfu
 
 import (
 	"container/heap"
-	"goCache"
+	"goCache/cache"
 	"goCache/common"
 )
 
@@ -14,7 +14,7 @@ type entry struct {
 
 func (e *entry) Len() int {
 	// 多了 weight 和 index 字段
-	return goCache.CalcLen(e.Value) + 8
+	return cache.CalcLen(e.Value) + 8
 }
 
 // lfu 采用 最小堆

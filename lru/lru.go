@@ -2,7 +2,7 @@ package lru
 
 import (
 	"container/list"
-	"goCache"
+	"goCache/cache"
 	"goCache/common"
 )
 
@@ -25,7 +25,7 @@ func (l *lru) Set(key string, value interface{}) {
 	if e, ok := l.cache[key]; ok {
 		l.ll.MoveToBack(e)
 		en := e.Value.(*common.Entry)
-		l.usedBytes = l.usedBytes - goCache.CalcLen(en.Value) + goCache.CalcLen(value)
+		l.usedBytes = l.usedBytes - cache.CalcLen(en.Value) + cache.CalcLen(value)
 		en.Value = value
 		return
 	}
@@ -75,7 +75,7 @@ func (l *lru) removeElement(e *list.Element) {
 		l.onEvicted(en.Key, en.Value)
 	}
 }
-func New(maxBytes int, onEvicted func(key string, value interface{})) goCache.Cache {
+func New(maxBytes int, onEvicted func(key string, value interface{})) cache.Cache {
 	return &lru{
 		maxBytes:  maxBytes,
 		onEvicted: onEvicted,

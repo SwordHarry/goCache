@@ -2,7 +2,7 @@ package lfu
 
 import (
 	"container/heap"
-	"goCache"
+	"goCache/cache"
 	"goCache/common"
 )
 
@@ -18,7 +18,7 @@ type lfu struct {
 // 若已存在，则更新值，增加权重，重新构建堆
 func (l *lfu) Set(key string, value interface{}) {
 	if e, ok := l.cache[key]; ok {
-		l.usedBytes = l.usedBytes - goCache.CalcLen(e.Value) + goCache.CalcLen(value)
+		l.usedBytes = l.usedBytes - cache.CalcLen(e.Value) + cache.CalcLen(value)
 		l.queue.update(e, value, e.weight+1)
 		return
 	}
@@ -63,7 +63,7 @@ func (l *lfu) Len() int {
 	return l.queue.Len()
 }
 
-func New(maxBytes int, onEvicted func(key string, value interface{})) goCache.Cache {
+func New(maxBytes int, onEvicted func(key string, value interface{})) cache.Cache {
 	q := make(queue, 0, 1024)
 	return &lfu{
 		maxBytes:  maxBytes,

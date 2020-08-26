@@ -1,6 +1,8 @@
 package common
 
-import "goCache"
+import (
+	"goCache/cache"
+)
 
 // 实体
 type Entry struct {
@@ -9,7 +11,7 @@ type Entry struct {
 }
 
 func (e *Entry) Len() int {
-	return goCache.CalcLen(e.Value)
+	return cache.CalcLen(e.Value)
 }
 
 // 回调

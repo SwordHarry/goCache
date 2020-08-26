@@ -1,4 +1,4 @@
-package goCache
+package cache
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 // Cache 缓存接口
 type Cache interface {
-	Set(key string,value interface{})
+	Set(key string, value interface{})
 	Get(key string) interface{}
 	Del(key string)
 	DelOldest() // 按指定策略删除最无用的一个缓存值
@@ -19,7 +19,7 @@ type Value interface {
 }
 
 // 计算元素内存
-func CalcLen(value interface{}) int  {
+func CalcLen(value interface{}) int {
 	var n int
 	switch v := value.(type) {
 	case Value:
@@ -29,17 +29,17 @@ func CalcLen(value interface{}) int  {
 			n = 16 + len(v)
 		} else {
 			n = 8 + len(v)
-	}
-	case bool, uint8,int8:
+		}
+	case bool, uint8, int8:
 		n = 1
 
 	case int16, uint16:
 		n = 2
-	case int32,uint32,float32:
+	case int32, uint32, float32:
 		n = 4
-	case int64,uint64,float64:
+	case int64, uint64, float64:
 		n = 8
-	case int,uint:
+	case int, uint:
 		if runtime.GOARCH == "amd64" {
 			n = 8
 		} else {
