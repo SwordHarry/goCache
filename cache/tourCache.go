@@ -1,6 +1,4 @@
-package goCache
-
-import "goCache/cache"
+package cache
 
 // Getter 为外部回调
 type Getter interface {
@@ -15,13 +13,13 @@ func (f GetFunc) Get(key string) interface{} {
 
 // 整合并发安全和外部回调
 type TourCache struct {
-	mainCache *cache.SafeCache
+	mainCache *SafeCache
 	getter    Getter
 }
 
-func NewTourCache(getter Getter, c cache.Cache) *TourCache {
+func NewTourCache(getter Getter, c Cache) *TourCache {
 	return &TourCache{
-		mainCache: cache.NewSafeCache(c),
+		mainCache: NewSafeCache(c),
 		getter:    getter,
 	}
 }
@@ -46,6 +44,13 @@ func (t *TourCache) Get(key string) interface{} {
 	return nil
 }
 
-func (t *TourCache) Stat() *cache.Stat {
+func (t *TourCache) Set(key string, val interface{}) {
+	if val == nil {
+		return
+	}
+	t.mainCache.Set(key, val)
+}
+
+func (t *TourCache) Stat() *Stat {
 	return t.mainCache.Stat()
 }

@@ -1,4 +1,4 @@
-package goCache
+package cache
 
 import (
 	"github.com/matryer/is"
